@@ -1,0 +1,120 @@
+// Prisma schema for Medical-app
+// Users + role-specific profiles + clinical domain
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  PHARMACIST
+  ADMIN
+}
+
+enum PrescriptionStatus {
+  PENDING
+  DISPENSED
+  CANCELLED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  name          String
+  role          Role
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  patient    Patient?
+  doctor     Doctor?
+  pharmacist Pharmacist?
+}
+
+model Clinic {
+  id        String   @id @default(cuid())
+  name      String
+  address   String?
+  phone     String?
+  doctors   Doctor[]
+  createdAt DateTime @default(now())
+}
+
+model Patient {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dateOfBirth   DateTime?
+  gender        String?
+  bloodType     String?
+  allergies     String?
+
+  records       MedicalRecord[]
+  prescriptions Prescription[]
+}
+
+model Doctor {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty       String?
+  licenseNumber   String?  @unique
+  clinicId        String?
+  clinic          Clinic?  @relation(fields: [clinicId], references: [id])
+
+  records         MedicalRecord[]
+  prescriptions   Prescription[]
+}
+
+model Pharmacist {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pharmacyName  String?
+  licenseNumber String?  @unique
+
+  dispensed     Prescription[] @relation("DispensedBy")
+}
+
+model MedicalRecord {
+  id          String   @id @default(cuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId    String
+  doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  visitDate   DateTime @default(now())
+  diagnosis   String
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  prescriptions Prescription[]
+}
+
+model Prescription {
+  id            String   @id @default(cuid())
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId      String
+  doctor        Doctor   @relation(fields: [doctorId], references: [id])
+  recordId      String?
+  record        MedicalRecord? @relation(fields: [recordId], references: [id])
+
+  medication    String
+  dosage        String
+  frequency     String
+  duration      String?
+  instructions  String?
+
+  status        PrescriptionStatus @default(PENDING)
+  issuedAt      DateTime           @default(now())
+  dispensedAt   DateTime?
+  dispensedById String?
+  dispensedBy   Pharmacist?        @relation("DispensedBy", fields: [dispensedById], references: [id])
+}
