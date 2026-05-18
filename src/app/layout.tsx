@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Nav from "@/components/Nav";
+import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "Medical-app",
@@ -16,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Nav />
-        <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
+        <Providers>
+          <Nav />
+          <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
+        </Providers>
       </body>
     </html>
   );
