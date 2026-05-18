@@ -21,6 +21,11 @@ export default async function Nav() {
               >
                 Dashboard
               </Link>
+              {session.user.role === "DOCTOR" && (
+                <Link href="/doctor/patients" className="hover:text-brand">
+                  Patients
+                </Link>
+              )}
               <span className="text-gray-600">
                 {session.user.name}{" "}
                 <span className="text-xs text-gray-400">
