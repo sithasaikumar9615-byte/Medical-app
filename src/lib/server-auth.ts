@@ -83,6 +83,56 @@ export async function requirePatientApi(): Promise<
 }
 
 /**
+ * For pages: require the current user to be a PHARMACIST and return their Pharmacist row.
+ */
+export async function requirePharmacistPage(): Promise<{
+  session: Session;
+  pharmacist: Pharmacist;
+}> {
+  const session = await requireSession(["PHARMACIST"]);
+  const pharmacist = await prisma.pharmacist.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!pharmacist) redirect("/post-login");
+  return { session, pharmacist };
+}
+
+/**
+ * For API routes: require a logged-in PHARMACIST. Returns the Pharmacist row, or an error response.
+ */
+export async function requirePharmacistApi(): Promise<
+  | { ok: true; pharmacist: Pharmacist; userId: string }
+  | { ok: false; res: NextResponse }
+> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return {
+      ok: false,
+      res: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    };
+  }
+  if (session.user.role !== "PHARMACIST") {
+    return {
+      ok: false,
+      res: NextResponse.json({ error: "Forbidden" }, { status: 403 }),
+    };
+  }
+  const pharmacist = await prisma.pharmacist.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!pharmacist) {
+    return {
+      ok: false,
+      res: NextResponse.json(
+        { error: "Pharmacist profile missing" },
+        { status: 404 }
+      ),
+    };
+  }
+  return { ok: true, pharmacist, userId: session.user.id };
+}
+
+/**
  * For API routes: require a logged-in DOCTOR. Returns either the Doctor row,
  * or a NextResponse error to be returned by the handler.
  */

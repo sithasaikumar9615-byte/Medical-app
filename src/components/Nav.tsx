@@ -26,6 +26,16 @@ export default async function Nav() {
                   Patients
                 </Link>
               )}
+              {session.user.role === "PHARMACIST" && (
+                <>
+                  <Link href="/pharmacist/queue" className="hover:text-brand">
+                    Queue
+                  </Link>
+                  <Link href="/pharmacist/history" className="hover:text-brand">
+                    History
+                  </Link>
+                </>
+              )}
               {session.user.role === "PATIENT" && (
                 <>
                   <Link href="/patient/records" className="hover:text-brand">
