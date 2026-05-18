@@ -34,6 +34,55 @@ export async function requireDoctorPage(): Promise<{
 }
 
 /**
+ * For pages: require the current user to be a PATIENT and return their Patient row.
+ */
+export async function requirePatientPage(): Promise<{
+  session: Session;
+  patient: Patient;
+}> {
+  const session = await requireSession(["PATIENT"]);
+  const patient = await prisma.patient.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!patient) redirect("/post-login");
+  return { session, patient };
+}
+
+/**
+ * For API routes: require a logged-in PATIENT. Returns the Patient row, or an error response.
+ */
+export async function requirePatientApi(): Promise<
+  { ok: true; patient: Patient; userId: string } | { ok: false; res: NextResponse }
+> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return {
+      ok: false,
+      res: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    };
+  }
+  if (session.user.role !== "PATIENT") {
+    return {
+      ok: false,
+      res: NextResponse.json({ error: "Forbidden" }, { status: 403 }),
+    };
+  }
+  const patient = await prisma.patient.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!patient) {
+    return {
+      ok: false,
+      res: NextResponse.json(
+        { error: "Patient profile missing" },
+        { status: 404 }
+      ),
+    };
+  }
+  return { ok: true, patient, userId: session.user.id };
+}
+
+/**
  * For API routes: require a logged-in DOCTOR. Returns either the Doctor row,
  * or a NextResponse error to be returned by the handler.
  */

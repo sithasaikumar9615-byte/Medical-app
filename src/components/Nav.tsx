@@ -26,6 +26,22 @@ export default async function Nav() {
                   Patients
                 </Link>
               )}
+              {session.user.role === "PATIENT" && (
+                <>
+                  <Link href="/patient/records" className="hover:text-brand">
+                    Records
+                  </Link>
+                  <Link
+                    href="/patient/prescriptions"
+                    className="hover:text-brand"
+                  >
+                    Prescriptions
+                  </Link>
+                  <Link href="/patient/profile" className="hover:text-brand">
+                    Profile
+                  </Link>
+                </>
+              )}
               <span className="text-gray-600">
                 {session.user.name}{" "}
                 <span className="text-xs text-gray-400">
