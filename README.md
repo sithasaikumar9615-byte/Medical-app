@@ -26,7 +26,12 @@ Three roles are supported: **Patient**, **Doctor**, **Pharmacist**.
    npm run db:generate
    npm run db:push
    ```
-4. Start the dev server:
+4. (Optional) Seed the database with sample users and clinical data:
+   ```bash
+   npm run db:seed
+   ```
+   This creates one of each role; sign-in details are printed at the end of the seed.
+5. Start the dev server:
    ```bash
    npm run dev
    ```

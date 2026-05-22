@@ -21,6 +21,40 @@ export default async function Nav() {
               >
                 Dashboard
               </Link>
+              {session.user.role === "DOCTOR" && (
+                <Link href="/doctor/patients" className="hover:text-brand">
+                  Patients
+                </Link>
+              )}
+              {session.user.role === "PHARMACIST" && (
+                <>
+                  <Link href="/pharmacist/queue" className="hover:text-brand">
+                    Queue
+                  </Link>
+                  <Link href="/pharmacist/history" className="hover:text-brand">
+                    History
+                  </Link>
+                </>
+              )}
+              {session.user.role === "PATIENT" && (
+                <>
+                  <Link href="/patient/records" className="hover:text-brand">
+                    Records
+                  </Link>
+                  <Link
+                    href="/patient/prescriptions"
+                    className="hover:text-brand"
+                  >
+                    Prescriptions
+                  </Link>
+                  <Link href="/patient/education" className="hover:text-brand">
+                    Education
+                  </Link>
+                  <Link href="/patient/profile" className="hover:text-brand">
+                    Profile
+                  </Link>
+                </>
+              )}
               <span className="text-gray-600">
                 {session.user.name}{" "}
                 <span className="text-xs text-gray-400">
