@@ -47,6 +47,9 @@ export default async function Nav() {
                   >
                     Prescriptions
                   </Link>
+                  <Link href="/patient/education" className="hover:text-brand">
+                    Education
+                  </Link>
                   <Link href="/patient/profile" className="hover:text-brand">
                     Profile
                   </Link>
