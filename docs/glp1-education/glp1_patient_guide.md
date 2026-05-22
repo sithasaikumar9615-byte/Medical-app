@@ -26,7 +26,7 @@ The medicines in this class that you are most likely to hear about, listed by th
 - **Liraglutide** — sold as **Victoza** for type 2 diabetes and as **Saxenda** for chronic weight management. It is given as a once-daily injection [18][19].
 - **Dulaglutide** — sold as **Trulicity**. A once-weekly injection used for type 2 diabetes [20].
 - **Semaglutide** — sold as **Ozempic** for type 2 diabetes (once-weekly injection), as **Wegovy** for chronic weight management (once-weekly injection at higher doses), and as **Rybelsus** as a once-daily tablet for type 2 diabetes [15][16][17].
-- **Lixisenatide** — sold as **Adlyxin** (once-daily injection). It is less widely used today but is still in some treatment guidelines [25].
+- **Lixisenatide** — sold as **Adlyxin** (once-daily injection). It is less widely used today; lixisenatide as a single-agent product was discontinued in the US in 2023, although it remains available in some other markets and as a component of fixed-ratio insulin combinations [25].
 
 A newer drug, **tirzepatide**, sold as **Mounjaro** for type 2 diabetes and **Zepbound** for chronic weight management, is often discussed in the same conversation as the GLP-1 RAs because it acts on the same body system. It is more accurate to call tirzepatide a dual GIP and GLP-1 receptor agonist: it mimics two incretin hormones at once, not only GLP-1 [10][11][23][24]. Trials and prescribing labels treat it as a closely related but distinct class.
 

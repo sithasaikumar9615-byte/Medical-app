@@ -8,6 +8,24 @@ import * as React from "react";
 // Supports: # / ## / ### headings, paragraphs, -/*/+ unordered lists,
 // 1. ordered lists, > blockquotes, ``` fenced code blocks, --- rules,
 // **bold**, *italic*, `code`. Everything else renders as plain text.
+//
+// Deliberate limitations (recorded so future authors are not surprised):
+//
+// * Pipe tables are NOT supported. The Python build_html.py / build_pdf.py
+//   counterparts do parse `| a | b |` tables, so a Markdown file that
+//   renders cleanly in the printable PDF can lose its tables when read
+//   here. Any topic intended for in-app rendering must therefore avoid
+//   tables (use bullet lists instead) until table support is added.
+// * Markdown links `[text](url)` are NOT parsed; they survive as literal
+//   characters. The current source files have no Markdown links, and
+//   inline numbered citation markers like `[1][2]` are intentionally
+//   inert plain text that point to the numbered References section at
+//   the bottom of each guide rather than being clickable anchors.
+// * Heading depth is clamped to <h3>: any `####` or deeper input renders
+//   visually identically to `###`. This matches the H_CLS map below and
+//   is fine for the current education content; if a future topic needs
+//   h4/h5/h6 the clamp in `parseBlocks` and the H_CLS map must both be
+//   widened together.
 
 const CODE_PLACEHOLDER = /\u0000C(\d+)\u0000/g;
 

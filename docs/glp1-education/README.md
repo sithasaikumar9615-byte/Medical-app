@@ -40,6 +40,20 @@ cp docs/glp1-education/glp1_patient_guide.pdf public/education/glp1_patient_guid
 
 The `public/education/` copy step is performed by FEAT-002 when the in-app patient-education page is wired up. The master copy in this folder remains the source of truth.
 
+> **Merge-gate reminder:** any change to `glp1_patient_guide.md` MUST be followed by re-running `build_html.py`, re-running `build_pdf.py`, and copying the new PDF into `public/education/`, all in the same commit. The build is reproducible (the same `.md` produces a byte-identical `.pdf` on every run), so a reviewer can verify the artefacts match the source by re-running `build_pdf.py` and comparing `sha256sum`. There is no automated CI check for this today; the discipline is on the author and the reviewer.
+
+> **Auth posture (deliberate invariant):** the rendered Markdown at
+> `/patient/education/glp1` is gated behind `requirePatientPage()`, but
+> the PDF served from `public/education/glp1_patient_guide.pdf` is
+> reachable unauthenticated by direct URL. This is acceptable ONLY
+> because the GLP-1 guide is generic, non-PHI patient education that is
+> safe to disclose to anyone. `public/education/` is therefore reserved
+> for non-PHI educational copy. A future topic that includes anything
+> patient-specific must NOT be served from `public/`; it must be moved
+> behind an authenticated streaming route (for example
+> `/api/patient/education/<slug>/pdf`) that calls `requirePatientPage()`
+> before returning the bytes.
+
 ## What's inside
 
 - **Section 1: Who this guide is for.** Audience and the boilerplate disclaimer.
