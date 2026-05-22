@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { requirePatientPage } from "@/lib/server-auth";
+import { requireSignedInPage } from "@/lib/server-auth";
+import { dashboardPathForRole } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +15,13 @@ const TOPICS: Array<{ slug: string; title: string; summary: string }> = [
 ];
 
 export default async function PatientEducationPage() {
-  await requirePatientPage();
+  const session = await requireSignedInPage();
 
   return (
     <div className="space-y-6">
       <header>
         <Link
-          href="/patient/dashboard"
+          href={dashboardPathForRole(session.user.role)}
           className="text-sm text-gray-500 hover:text-brand"
         >
           ← Dashboard
@@ -42,7 +43,7 @@ export default async function PatientEducationPage() {
             <h2 className="font-medium text-brand-dark">{topic.title}</h2>
             <p className="mt-2 text-sm text-gray-600">{topic.summary}</p>
             <Link
-              href={`/patient/education/${topic.slug}`}
+              href={`/education/${topic.slug}`}
               className="mt-3 inline-block text-sm text-brand hover:text-brand-dark"
             >
               Read guide →

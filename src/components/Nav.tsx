@@ -21,6 +21,9 @@ export default async function Nav() {
               >
                 Dashboard
               </Link>
+              <Link href="/education" className="hover:text-brand">
+                Education
+              </Link>
               {session.user.role === "DOCTOR" && (
                 <Link href="/doctor/patients" className="hover:text-brand">
                   Patients
@@ -46,9 +49,6 @@ export default async function Nav() {
                     className="hover:text-brand"
                   >
                     Prescriptions
-                  </Link>
-                  <Link href="/patient/education" className="hover:text-brand">
-                    Education
                   </Link>
                   <Link href="/patient/profile" className="hover:text-brand">
                     Profile
