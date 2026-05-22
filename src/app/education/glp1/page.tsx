@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { cache } from "react";
 import Link from "next/link";
-import { requirePatientPage } from "@/lib/server-auth";
+import { requireSignedInPage } from "@/lib/server-auth";
 import { renderMarkdown } from "@/lib/markdown";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +27,7 @@ const loadGuideMarkdown = cache(async (): Promise<string> => {
 });
 
 export default async function Glp1EducationPage() {
-  await requirePatientPage();
+  await requireSignedInPage();
 
   const md = await loadGuideMarkdown();
 
@@ -35,7 +35,7 @@ export default async function Glp1EducationPage() {
     <div className="space-y-6">
       <header>
         <Link
-          href="/patient/education"
+          href="/education"
           className="text-sm text-gray-500 hover:text-brand"
         >
           ← Education
