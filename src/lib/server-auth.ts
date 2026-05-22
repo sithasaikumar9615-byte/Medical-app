@@ -19,6 +19,16 @@ export async function requireSession(
 }
 
 /**
+ * For pages: require any logged-in user, regardless of role.
+ * Redirects to /login if anonymous.
+ */
+export async function requireSignedInPage(): Promise<Session> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) redirect("/login");
+  return session;
+}
+
+/**
  * For pages: require the current user to be a DOCTOR and return their Doctor row.
  */
 export async function requireDoctorPage(): Promise<{

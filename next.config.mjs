@@ -10,10 +10,24 @@ const nextConfig = {
     // serverless / Vercel deploys. Listing it here forces the tracer
     // to include it. `next dev` already works without this entry.
     outputFileTracingIncludes: {
-      "/patient/education/glp1": [
+      "/education/glp1": [
         "./docs/glp1-education/glp1_patient_guide.md",
       ],
     },
+  },
+  async redirects() {
+    return [
+      {
+        source: "/patient/education",
+        destination: "/education",
+        permanent: true,
+      },
+      {
+        source: "/patient/education/:slug",
+        destination: "/education/:slug",
+        permanent: true,
+      },
+    ];
   },
 };
 
