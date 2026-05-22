@@ -6,8 +6,8 @@ const nextConfig = {
     // `docs/glp1-education/` at request time. The path is built with
     // path.join(process.cwd(), "docs", ...) which Next's output tracer
     // cannot statically analyse, so the .md file would otherwise not be
-    // bundled into the serverless function for `next build` /
-    // `output: "standalone"` deploys. Listing it here forces the tracer
+    // bundled into the serverless function for `next build` and
+    // serverless / Vercel deploys. Listing it here forces the tracer
     // to include it. `next dev` already works without this entry.
     outputFileTracingIncludes: {
       "/patient/education/glp1": [

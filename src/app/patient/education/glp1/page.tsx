@@ -7,13 +7,15 @@ import { renderMarkdown } from "@/lib/markdown";
 
 export const dynamic = "force-dynamic";
 
-// The Markdown source is repo-controlled and never changes between deploys.
 // `React.cache` (re-exported from the existing `react` 18.3.1 dep, no new
-// package) memoises the result for the duration of a single render pass,
-// so even if this loader were called from multiple Server Components in
-// the same request graph the underlying `fs.readFile` would fire once
-// per request instead of once per call site. This was the lowest-friction
-// fix the v1 review suggested for the per-request disk-read concern.
+// package) provides request-scoped dedup: any future Server Component on
+// the same render pass that calls `loadGuideMarkdown()` reuses the same
+// `fs.readFile` instead of re-reading the file. It does NOT cache across
+// requests or across the process; with `dynamic = "force-dynamic"` and a
+// single call site today the wrapper is a no-op, but it keeps the loader
+// safe to call from additional Server Components later without fan-out.
+// A 10 KB file does not warrant module-scope memoisation, which has its
+// own dev-mode HMR subtleties.
 const loadGuideMarkdown = cache(async (): Promise<string> => {
   const mdPath = path.join(
     process.cwd(),
