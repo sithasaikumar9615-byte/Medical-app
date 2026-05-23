@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#4A1A6F" />
+
+  <title>Sitha Sai 50 Days Challenge</title>
+  <meta name="description" content="A 50-day personal challenge tracker for MSc Diabetes revision, fitness, meditation, and growth." />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+
+  <!-- iOS install support -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Sitha 50d" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <main id="app">
+    <header class="hero">
+      <div class="hero-top">
+        <button class="icon-btn" id="settingsBtn" aria-label="Settings">⚙</button>
+        <div class="brand">
+          <div class="brand-title">Sitha Sai</div>
+          <div class="brand-sub">50 Days Challenge</div>
+        </div>
+        <button class="icon-btn" id="overviewBtn" aria-label="Overview">▦</button>
+      </div>
+
+      <div class="progress-ring">
+        <svg viewBox="0 0 120 120" width="140" height="140">
+          <circle cx="60" cy="60" r="52" class="ring-bg" />
+          <circle cx="60" cy="60" r="52" class="ring-fg" id="ringFg" />
+        </svg>
+        <div class="ring-text">
+          <div class="ring-day" id="dayNumber">Day 1</div>
+          <div class="ring-pct" id="progressPct">0%</div>
+        </div>
+      </div>
+
+      <div class="streak-row">
+        <div class="chip">🔥 Streak: <span id="streakCount">0</span></div>
+        <div class="chip">✓ Done: <span id="doneCount">0</span>/50</div>
+      </div>
+
+      <div class="affirmation" id="affirmation"></div>
+    </header>
+
+    <section class="day-nav">
+      <button class="nav-btn" id="prevDay" aria-label="Previous day">‹</button>
+      <div class="day-info">
+        <div class="day-date" id="dayDate">—</div>
+        <div class="day-label" id="dayLabel">Today</div>
+      </div>
+      <button class="nav-btn" id="nextDay" aria-label="Next day">›</button>
+    </section>
+
+    <section class="card tasks">
+      <h2 class="card-title">Daily Routine</h2>
+      <ul id="taskList" class="task-list"></ul>
+      <form id="addTaskForm" class="add-task">
+        <input type="text" id="newTaskInput" placeholder="Add a task for this day…" maxlength="60" />
+        <button type="submit" aria-label="Add">+</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">MSc Diabetes — today's topic</h2>
+      <input type="text" id="studyTopic" placeholder="e.g. Insulin pharmacology, DKA management…" maxlength="120" />
+      <div class="row">
+        <label class="hours-label">Hours studied
+          <input type="number" id="studyHours" min="0" max="24" step="0.5" placeholder="0" />
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Reflection</h2>
+      <textarea id="dayNotes" rows="4" placeholder="One line about today — what went well, what to improve, gratitude…"></textarea>
+      <div class="mood-row">
+        <span>Mood:</span>
+        <div class="mood-options" id="moodOptions">
+          <button data-mood="🌟" type="button">🌟</button>
+          <button data-mood="😊" type="button">😊</button>
+          <button data-mood="😐" type="button">😐</button>
+          <button data-mood="😓" type="button">😓</button>
+          <button data-mood="💪" type="button">💪</button>
+        </div>
+      </div>
+    </section>
+
+    <button class="save-btn" id="saveBtn">Save day</button>
+
+    <footer class="foot">
+      <div>Made with ❤ for your comeback journey</div>
+      <div class="version">v1.0.0</div>
+    </footer>
+  </main>
+
+  <!-- Overview modal -->
+  <div class="modal hidden" id="overviewModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>50-Day Overview</h2>
+        <button class="icon-btn" data-close>✕</button>
+      </div>
+      <div class="grid-50" id="grid50"></div>
+      <div class="legend">
+        <span><i class="dot done"></i> Completed</span>
+        <span><i class="dot partial"></i> Partial</span>
+        <span><i class="dot empty"></i> Empty</span>
+        <span><i class="dot today"></i> Today</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings modal -->
+  <div class="modal hidden" id="settingsModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Settings</h2>
+        <button class="icon-btn" data-close>✕</button>
+      </div>
+      <label class="field">
+        <span>Start date</span>
+        <input type="date" id="startDateInput" />
+      </label>
+      <label class="field">
+        <span>Your name (for greeting)</span>
+        <input type="text" id="userNameInput" maxlength="40" placeholder="Sitha Sai" />
+      </label>
+      <h3>Default daily tasks</h3>
+      <ul id="defaultsList" class="defaults-list"></ul>
+      <form id="addDefaultForm" class="add-task">
+        <input type="text" id="newDefaultInput" placeholder="New default task (e.g. Walk 30 mins)" maxlength="60" />
+        <button type="submit" aria-label="Add">+</button>
+      </form>
+      <div class="settings-actions">
+        <button class="btn ghost" id="exportBtn">Export data</button>
+        <button class="btn ghost" id="importBtn">Import data</button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+        <button class="btn danger" id="resetBtn">Reset everything</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
