@@ -1,0 +1,15 @@
+{
+  "name": "Sitha Sai 50 Days Challenge",
+  "short_name": "Sitha 50d",
+  "description": "Personal 50-day journey: MSc Diabetes revision, exercise, meditation, and bhakti pooja.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf7ef",
+  "theme_color": "#4A1A6F",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
